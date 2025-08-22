@@ -1,8 +1,9 @@
-name: CI/CD Pipeline - Docker + EC2
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   deploy:
