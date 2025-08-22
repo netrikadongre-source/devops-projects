@@ -72,7 +72,6 @@ To destroy resources and avoid charges:
 ```
 
 ## 👤 Author
----------
 - **Name:** Netrika Dongre
 - **GitHub:** [netrikadongre-source](https://github.com/netrikadongre-source)
 - **DockerHub:** [netrika0210](https://hub.docker.com/u/netrika0210)
