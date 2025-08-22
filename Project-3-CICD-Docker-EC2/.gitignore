@@ -1,0 +1,18 @@
+# Node
+node_modules
+npm-debug.log
+.env
+
+# Docker
+*.log
+
+# Keys & secrets (never commit)
+*.pem
+*.key
+*.csv
+
+# Terraform/general
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
