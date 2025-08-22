@@ -1,1 +1,39 @@
+name: CI/CD to Docker Hub & EC2
 
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build & Push image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./Project-3-CICD-Docker-EC2/app
+          push: true
+          tags: netrika0210/project3-cicd-app:latest
+
+      - name: Deploy on EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull netrika0210/project3-cicd-app:latest
+            docker stop project3-app || true
+            docker rm project3-app || true
+            docker run -d -p 3000:3000 --name project3-app netrika0210/project3-cicd-app:latest
+            docker ps -a
