@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI/CD Pipeline - Docker + EC2
 
 on:
   push:
@@ -10,31 +10,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Docker
-      uses: docker/setup-buildx-action@v2
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
 
-    - name: Login to DockerHub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and Push Docker Image
-      run: |
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/project3-cicd-app ./Project-3-CICD-Docker-EC2/app
-        docker push ${{ secrets.DOCKER_USERNAME }}/project3-cicd-app
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/project3-cicd-app ./Project-3-CICD-Docker-EC2
+          docker push ${{ secrets.DOCKER_USERNAME }}/project3-cicd-app
 
-    - name: Deploy to EC2 via SSH
-      uses: appleboy/ssh-action@v0.1.10
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/project3-cicd-app
-          docker stop cicd-app || true
-          docker rm cicd-app || true
-          docker run -d -p 3000:3000 --name cicd-app ${{ secrets.DOCKER_USERNAME }}/project3-cicd-app
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/project3-cicd-app
+            docker stop cicd-app || true
+            docker rm cicd-app || true
+            docker run -d -p 3000:3000 --name cicd-app ${{ secrets.DOCKER_USERNAME }}/project3-cicd-app
