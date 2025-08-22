@@ -24,7 +24,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/project3-cicd-app .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/project3-cicd-app ./Project-3-CICD-Docker-EC2/app
           docker push ${{ secrets.DOCKER_USERNAME }}/project3-cicd-app
 
       - name: Deploy to EC2 via SSH
